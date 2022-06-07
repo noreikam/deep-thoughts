@@ -46,10 +46,7 @@ module.exports = (
     : dateObj.getDate();
 
   const year = dateObj.getFullYear();
-  let hour =
-    dateObj.getHours() > 12
-      ? Math.floor(dateObj.getHours() / 2)
-      : dateObj.getHours();
+  let hour = dateObj.getHours() % 12;
 
   // if hour is 0 (12:00am), change it to 12
   if (hour === 0) {
