@@ -46,14 +46,17 @@ module.exports = (
     : dateObj.getDate();
 
   const year = dateObj.getFullYear();
-  let hour = dateObj.getHours() % 12;
 
-  // if hour is 0 (12:00am), change it to 12
+  let hour = dateObj.getHours() % 12;
+  // if hour is 0 change it to 12
   if (hour === 0) {
     hour = 12;
   }
 
-  const minutes = dateObj.getMinutes();
+  const minutes = dateObj.getMinutes().toLocaleString("en-US", {
+    minimumIntegerDigits: 2,
+    useGrouping: false
+  });
 
   // set `am` or `pm`
   const periodOfDay = dateObj.getHours() >= 12 ? 'pm' : 'am';
