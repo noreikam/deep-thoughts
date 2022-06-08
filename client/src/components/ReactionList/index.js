@@ -16,11 +16,10 @@ const ReactionList = ({ reactions }) => {
                 {reaction.username} on {reaction.createdAt}  
               </Link>
             </p>
-          ))
-        }
+          ))}
       </div>
     </div>
-  )
+  );
 };
 
 export default ReactionList;
