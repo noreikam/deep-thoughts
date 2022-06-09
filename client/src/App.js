@@ -1,6 +1,8 @@
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { setContext } from '@apollo/client/link/context';
+
 import Login from './pages/Login';
 import NoMatch from './pages/NoMatch';
 import SingleThought from './pages/SingleThought';
@@ -13,10 +15,21 @@ import Home from './pages/Home';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
-})
+});
+
+// function setContext will retrieve the token from localStorage and add it to the HTTP request headers.  Note the first parameter set to '_' as placeholder bc the function requires the parameter but our application of the function doesn't need it
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('id_token');
+  return {
+    headers: {
+      ...headers, 
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 })
 
@@ -32,8 +45,7 @@ function App() {
                 path="/"
                 element={<Home />}
               />
-              <Route
-                path="/login"
+              <Route path="/login"
                 element={<Login />}
               />
               <Route
@@ -42,6 +54,10 @@ function App() {
               />
               <Route
                 path="/profile/:username"
+                element={<Profile />}
+              />
+              <Route
+                path="/profile"
                 element={<Profile />}
               />
               <Route
